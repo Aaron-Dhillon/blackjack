@@ -1,2 +1,3 @@
 %% Black Jack Game
-%%Authors: Aaron Dhillon
+%%Authors: Aaron Dhillon, 
+%%Morgan Joyner
