@@ -3,27 +3,26 @@
 clc
 clear
 
-
-
-
-
-
 endGame = false;
 exitGame = false;
 
 
 
 while exitGame ~= true
-    beginScene = simpleGameEngine('begin.png',414,682,3);
+    close all;
+    endGame =true;
+    beginScene = simpleGameEngine('begin.png',826,1366,3);
     drawScene(beginScene, 1, 1)
     input = getKeyboardInput(beginScene);
+    
+    
     if input =='escape'
         close all;
         break;
     end
     if input == 'y'
         close all
-        rulesScene = simpleGameEngine('rules.png',1132,1918,0.5);
+        rulesScene = simpleGameEngine('rules.png',1132,1920);
         drawScene(rulesScene,1,1)
         input = getKeyboardInput(rulesScene);
         if input == 'p'
@@ -39,6 +38,8 @@ while exitGame ~= true
     if input =='n'
         endGame = false;
     end
+
+
     while endGame ~=true
     
     clear
@@ -50,13 +51,13 @@ while exitGame ~= true
     userHand(1) = dealcard();
     userHand(2) = dealcard();
 
-    scene = simpleGameEngine('retro_cards.png', 16,16,10,[0,200,0]);
+    scene = simpleGameEngine('retro_cards.png', 16,16,15,[0,200,0]);
     playScene = simpleGameEngine('playAgain.png',1128,1914);
 
 
-    backGround = [2 2 11 11 11 11 11 11 11 11 11 ;2 2 11 11 11 11 11 11 11 11 11];
+    backGround = [2 2 11 11 11 11 11 11 11 11 11 ;1 1 1 1 1 1 1 1 1 1 1;2 2 11 11 11 11 11 11 11 11 11];
 
-    table = [findCardVal(dealerHand(1)) 4 11 11 11 11 11 11 11 11 11 ;findCardVal(userHand(1)) findCardVal(userHand(2)) 11 11 11 11 11 11 11 11 11];
+    table = [findCardVal(dealerHand(1)) 4 11 11 11 11 11 11 11 11 11 ;1 1 1 1 1 1 1 1 1 1 1;findCardVal(userHand(1)) findCardVal(userHand(2)) 11 11 11 11 11 11 11 11 11];
 
 
 
@@ -65,6 +66,14 @@ while exitGame ~= true
 
     title("Would you like to hit or stay? (h or s)");
     i = getKeyboardInput(scene);
+    while true
+        if isequal(i,'s') || isequal(i,'h')
+            break;
+        else
+            i =getKeyboardInput(scene);
+        end
+    end
+
     
     
     currentValue = findHandValue(userHand);
@@ -77,8 +86,8 @@ while exitGame ~= true
         userHand(index) = newCard;
         
       
-        table(2,index) = findCardVal(userHand(index));
-        backGround(2,index) = 2;
+        table(3,index) = findCardVal(userHand(index));
+        backGround(3,index) = 2;
         drawScene(scene,backGround,table)
         currentValue = findHandValue(userHand);
 
@@ -93,9 +102,9 @@ while exitGame ~= true
             end
             dealerHand(l+1) = newDealerCard;
             dealerValue = findHandValue(dealerHand);
-            t =randi([1, 2], 1);
             l=l+1;
         end
+        dealerValue = findHandValue(dealerHand);
         
         if currentValue == 21 && checkWin(dealerValue,currentValue) == 1
             title("YOU WIN")
@@ -104,10 +113,17 @@ while exitGame ~= true
                  backGround(1,i) = 2;
             end
             drawScene(scene,backGround,table)
-            pause(5)
+            pause(8)
             close all;
             drawScene(playScene,1,1)
             n = getKeyboardInput(playScene);
+            while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScenev);
+                    end
+            end
             if n == 'n'
                 endGame = true;
                 break;
@@ -118,20 +134,27 @@ while exitGame ~= true
             end
                 
         end
-
         
-        if currentValue>21
-            if dealerValue>21
+        currentValue = findHandValue(userHand);
+        dealerValue = findHandValue(dealerHand);
+        if currentValue>21 && dealerValue>21
                 title("DRAW");
                 for i=2: length(dealerHand)
                  table(1,i) = findCardVal(dealerHand(i));
                  backGround(1,i) = 2;
                 end
                 drawScene(scene,backGround,table)
-                pause(5)
+                pause(8)
                 close all;
                 drawScene(playScene,1,1)
                 n = getKeyboardInput(playScene);
+                while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScene);
+                    end
+                end
                 if n == 'n'
                     endGame = true;
                     break;
@@ -140,17 +163,25 @@ while exitGame ~= true
                     break;
                 end
                     
-            else
+        end
+        if currentValue>21 && dealerValue<21
                 title ("YOU LOSEEEEE");
                 for i=2: length(dealerHand)
                  table(1,i) = findCardVal(dealerHand(i));
                  backGround(1,i) = 2;
                 end
                 drawScene(scene,backGround,table)
-                pause(5)
+                pause(8)
                 close all;
                 drawScene(playScene,1,1)
                 n = getKeyboardInput(playScene);
+                while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScene);
+                    end
+                end
                 if n == 'n'
                     endGame = true;
                     break;
@@ -158,8 +189,6 @@ while exitGame ~= true
                 if n =='y'
                     break;
                 end
-                    
-            end
 
         end
 
@@ -168,9 +197,6 @@ while exitGame ~= true
     end
     while(i=='s')
         currentValue = findHandValue(userHand);
-
-        
-        
         dealerValue =findHandValue(dealerHand);
         
         l = length(dealerHand);
@@ -181,7 +207,6 @@ while exitGame ~= true
             end
             dealerHand(l+1) = newDealerCard;
             dealerValue = findHandValue(dealerHand);
-            t =randi([1, 2], 1);
             l=l+1;
         end
         WLD = checkWin(dealerValue,currentValue);
@@ -192,10 +217,17 @@ while exitGame ~= true
                  backGround(1,i) = 2;
             end
             drawScene(scene,backGround,table)
-            pause(5)
+            pause(8)
             close all;
             drawScene(playScene,1,1)
             n = getKeyboardInput(playScene);
+            while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScene);
+                    end
+            end
             if n == 'n'
                 endGame = true;
                 break;
@@ -211,10 +243,17 @@ while exitGame ~= true
                 backGround(1,i) = 2;
             end
             drawScene(scene,backGround,table)
-            pause(5)
+            pause(8)
             close all;
             drawScene(playScene,1,1)
             n = getKeyboardInput(playScene);
+            while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScene);
+                    end
+            end
             if n == 'n'
                 endGame = true;
                 break;
@@ -230,10 +269,17 @@ while exitGame ~= true
                  table(1,i) = findCardVal(dealerHand(i));
                  backGround(1,i) = 2;
             end
-            pause(5)
+            pause(8)
             close all;
             drawScene(playScene,1,1)
             n = getKeyboardInput(playScene);
+            while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScene);
+                    end
+            end
             if n == 'n'
                 endGame = true;
                 break;
