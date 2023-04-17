@@ -236,7 +236,7 @@ while exitGame ~= true
                 break;
             end
         end
-        if WLD ==2
+        if WLD==2 && dealerValue<21
             title ("YOU LOSEEEEE");
             for i=2: length(dealerHand)
                 table(1,i) = findCardVal(dealerHand(i));
@@ -262,6 +262,33 @@ while exitGame ~= true
                 break;
             end   
         end
+        if  currentValue  < 21 && dealerValue>21
+            title ("YOU WIN");
+            for i=2: length(dealerHand)
+                table(1,i) = findCardVal(dealerHand(i));
+                backGround(1,i) = 2;
+            end
+            drawScene(scene,backGround,table)
+            pause(8)
+            close all;
+            drawScene(playScene,1,1)
+            n = getKeyboardInput(playScene);
+            while true
+                    if isequal(n,'y') || isequal(n,'n')
+                        break;
+                else
+                    n =getKeyboardInput(playScene);
+                    end
+            end
+            if n == 'n'
+                endGame = true;
+                break;
+            end
+            if n =='y'
+                break;
+            end   
+        end
+
 
         if WLD == 3
             title("DRAW");
