@@ -1,23 +1,26 @@
 function [value] = findHandValue(cards)
-
 t = length(cards);
-for i = 1:t
-    draw(i) = cards(i);
+
+totalValue=0;
+i =1;
+
+while i<=t
+    tempValue = cards(i);
+    while tempValue>13
+        tempValue = tempValue-13;
+    end
+    if tempValue>10
+        tempValue = 10;
+    end
+    if tempValue ==1
+        if (totalValue+11) <=21
+            tempValue = 11;
+        end
+    end
+
+    totalValue = totalValue+tempValue;
+    i=i+1;
 end
 
-
-for j = 1:length(draw)
-    while(draw(j)>13)
-        draw(j) = draw(j)-13;
-    end
-    if(draw(j)>10)
-        draw(j) = 10;
-    end
-    if(draw(j) ==1)
-        draw(j) = 11;
-    end
-end
-
-value = sum(draw);
-end
+value = totalValue;
 
